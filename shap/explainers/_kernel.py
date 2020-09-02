@@ -61,7 +61,7 @@ class Kernel(Explainer):
         self.keep_index = kwargs.get("keep_index", False)
         self.keep_index_ordered = kwargs.get("keep_index_ordered", False)
         self.data = convert_to_data(data, keep_index=self.keep_index)
-        model_null = match_model_to_data(self.model, self.data)
+        model_null = match_model_to_data(self.model, data)
 
         # enforce our current input type limitations
         assert isinstance(self.data, DenseData) or isinstance(self.data, SparseData), \
