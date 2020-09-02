@@ -8,7 +8,7 @@ from ._masker import Masker
 from numba import jit
 import logging
 
-log = logging.getLogger('shap')
+log = logging.getLogger('shap_domino')
 
 
 class Tabular(Masker):
@@ -25,7 +25,7 @@ class Tabular(Masker):
 
         max_samples : int
             The maximum number of samples to use from the passed background data. If data has more
-            than max_samples then shap.utils.sample is used to subsample the dataset. The number of
+            than max_samples then shap_domino.utils.sample is used to subsample the dataset. The number of
             samples coming out of the masker (to be integrated over) matches the number of samples in
             the background dataset. This means larger background dataset cause longer runtimes. Normally
             about 1, 10, 100, or 1000 background samples are reasonable choices.
@@ -56,7 +56,7 @@ class Tabular(Masker):
         # # warn users about large background data sets
         # if self.data.shape[0] > 100:
         #     log.warning("Using " + str(self.data.shape[0]) + " background data samples could cause slower " +
-        #                 "run times. Consider shap.utils.sample(data, K) to summarize the background using only K samples.")
+        #                 "run times. Consider shap_domino.utils.sample(data, K) to summarize the background using only K samples.")
 
         # compute the clustering of the data
         if clustering is not None:
@@ -210,7 +210,7 @@ class Independent(Tabular):
 
         max_samples : int
             The maximum number of samples to use from the passed background data. If data has more
-            than max_samples then shap.utils.sample is used to subsample the dataset. The number of
+            than max_samples then shap_domino.utils.sample is used to subsample the dataset. The number of
             samples coming out of the masker (to be integrated over) matches the number of samples in
             the background dataset. This means larger background dataset cause longer runtimes. Normally
             about 1, 10, 100, or 1000 background samples are reasonable choices.
@@ -234,7 +234,7 @@ class Partition(Tabular):
 
         max_samples : int
             The maximum number of samples to use from the passed background data. If data has more
-            than max_samples then shap.utils.sample is used to subsample the dataset. The number of
+            than max_samples then shap_domino.utils.sample is used to subsample the dataset. The number of
             samples coming out of the masker (to be integrated over) matches the number of samples in
             the background dataset. This means larger background dataset cause longer runtimes. Normally
             about 1, 10, 100, or 1000 background samples are reasonable choices.

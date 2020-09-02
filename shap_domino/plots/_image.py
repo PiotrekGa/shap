@@ -18,7 +18,7 @@ def image(shap_values, pixel_values=None, labels=None, width=20, aspect=0.2, hsp
     Parameters
     ----------
     shap_values : [numpy.array]
-        List of arrays of SHAP values. Each array has the shap (# samples x width x height x channels), and the
+        List of arrays of SHAP values. Each array has the shap_domino (# samples x width x height x channels), and the
         length of the list is equal to the number of model outputs that are being explained.
 
     pixel_values : numpy.array

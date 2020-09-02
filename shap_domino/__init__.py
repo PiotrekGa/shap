@@ -7,7 +7,7 @@ __version__ = '0.36.0'
 
 # check python version
 if (sys.version_info < (3, 0)):
-    warnings.warn("As of version 0.29.0 shap only supports Python 3 (not 2)!")
+    warnings.warn("As of version 0.29.0 shap_domino only supports Python 3 (not 2)!")
 
 from ._explanation import Explanation
 

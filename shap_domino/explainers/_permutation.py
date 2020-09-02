@@ -34,7 +34,7 @@ class Permutation(Explainer):
             masked samples are evaluated using the model function and the outputs are then averaged.
             As a shortcut for the standard masking using by SHAP you can pass a background data matrix
             instead of a function and that matrix will be used for masking. To use a clustering
-            game structure you can pass a shap.maksers.Tabular(data, clustering=\"correlation\") object.
+            game structure you can pass a shap_domino.maksers.Tabular(data, clustering=\"correlation\") object.
         """
         super(Permutation, self).__init__(model, masker, link=link)
 

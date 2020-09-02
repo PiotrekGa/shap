@@ -27,12 +27,12 @@ class Additive(Explainer):
             masked samples are evaluated using the model function and the outputs are then averaged.
             As a shortcut for the standard masking used by SHAP you can pass a background data matrix
             instead of a function and that matrix will be used for masking. To use a clustering
-            game structure you can pass a shap.maskers.Tabular(data, hclustering=\"correlation\") object, but
+            game structure you can pass a shap_domino.maskers.Tabular(data, hclustering=\"correlation\") object, but
             note that this structure information has no effect on the explanations of additive models.
         """
         super(Additive, self).__init__(model, masker)
 
-        assert safe_isinstance(self.masker, "shap.maskers.Tabular"), "The Additive explainer only supports the Tabular masker at the moment!"
+        assert safe_isinstance(self.masker, "shap_domino.maskers.Tabular"), "The Additive explainer only supports the Tabular masker at the moment!"
 
         # pre-compute per-feature offsets
         fm = MaskedModel(self.model, self.masker, np.zeros(self.masker.shape[1]))

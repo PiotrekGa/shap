@@ -21,7 +21,7 @@
 #
 import os
 import sys
-print(os.path.abspath('./shap'))
+print(os.path.abspath('./shap_domino'))
 sys.path.insert(0, os.path.abspath('..'))
 
 # -- General configuration ------------------------------------------------
@@ -308,7 +308,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'shap', 'SHAP Documentation',
+    (master_doc, 'shap_domino', 'SHAP Documentation',
      [author], 1)
 ]
 

@@ -1,6 +1,6 @@
 import numpy as np
 import warnings
-from shap.explainers._explainer import Explainer
+from shap_domino.explainers._explainer import Explainer
 from distutils.version import LooseVersion
 torch = None
 

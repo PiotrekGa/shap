@@ -40,7 +40,7 @@ def scatter(shap_values, color="#1E88E5", hist=True, axis_color="#333333", cmap=
         How to color the scatter plot points. This can be a fixed color string, or a Explanation object.
         If it is an explanation object then the scatter plot points are colored by the feature that
         seems to have the strongest interaction effect with the feature given by the shap_values argument.
-        This is calculated using shap.utils.approximate_interactions.
+        This is calculated using shap_domino.utils.approximate_interactions.
         If only a single column of an Explanation object is passed then that feature column will be used
         to color the data points.
 
@@ -71,9 +71,9 @@ def scatter(shap_values, color="#1E88E5", hist=True, axis_color="#333333", cmap=
 
     """
 
-    assert str(type(shap_values)).endswith("Explanation'>"), "The shap_values paramemter must be a shap.Explanation object!"
+    assert str(type(shap_values)).endswith("Explanation'>"), "The shap_values paramemter must be a shap_domino.Explanation object!"
     if len(shap_values.shape) != 1:
-        raise Exception("The passed Explanation object has multiple columns, please pass a single feature column to shap.plots.dependence like: shap_values[:,column]")
+        raise Exception("The passed Explanation object has multiple columns, please pass a single feature column to shap_domino.plots.dependence like: shap_values[:,column]")
     
     # this unpacks the explanation object for the code that was written earlier
     feature_names = [shap_values.feature_names]
@@ -97,7 +97,7 @@ def scatter(shap_values, color="#1E88E5", hist=True, axis_color="#333333", cmap=
         ymax = ymax.values
 
     
-    # TODO: This stacking could be avoided if we use the new shap.utils.potential_interactions function
+    # TODO: This stacking could be avoided if we use the new shap_domino.utils.potential_interactions function
     if str(type(color)).endswith("Explanation'>"):
         shap_values2 = color
         if issubclass(type(shap_values2.feature_names), (str, int)):
@@ -455,7 +455,7 @@ def dependence_legacy(ind, shap_values=None, features=None, feature_names=None, 
 
     interaction_index : "auto", None, int, or string
         The index of the feature used to color the plot. The name of a feature can also be passed
-        as a string. If "auto" then shap.common.approximate_interactions is used to pick what
+        as a string. If "auto" then shap_domino.common.approximate_interactions is used to pick what
         seems to be the strongest interaction (note that to find to true stongest interaction you
         need to compute the SHAP interaction values).
 

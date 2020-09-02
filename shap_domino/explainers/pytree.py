@@ -90,7 +90,7 @@ from .explainer import Explainer
 #     def tree_shap(self, tree, x, x_missing, phi, condition=0, condition_feature=0):
 
 #         # start the recursive algorithm
-#         shap._cext.tree_shap(
+#         shap_domino._cext.tree_shap(
 #             tree.max_depth, tree.children_left, tree.children_right, tree.children_default, tree.features,
 #             tree.thresholds, tree.values, tree.node_sample_weight,
 #             x, x_missing, phi, condition, condition_feature
@@ -108,7 +108,7 @@ from .explainer import Explainer
 #         self.node_sample_weight = node_sample_weight
 
 #         # we compute the expectations to make sure they follow the SHAP logic
-#         self.max_depth = shap._cext.compute_expectations(
+#         self.max_depth = shap_domino._cext.compute_expectations(
 #             self.children_left, self.children_right, self.node_sample_weight,
 #             self.values
 #         )
@@ -129,7 +129,7 @@ from .explainer import Explainer
 #             self.node_sample_weight = tree.weighted_n_node_samples.astype(np.float64)
 
 #             # we compute the expectations to make sure they follow the SHAP logic
-#             self.max_depth = shap._cext.compute_expectations(
+#             self.max_depth = shap_domino._cext.compute_expectations(
 #                 self.children_left, self.children_right, self.node_sample_weight,
 #                 self.values
 #             )

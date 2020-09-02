@@ -703,7 +703,7 @@ def summary_legacy(shap_values, features=None, feature_names=None, max_display=N
             # calculate kdes:
             ys = np.zeros((nbins, num_x_points))
             for i in range(nbins):
-                # get shap values in this bin:
+                # get shap_domino values in this bin:
                 shaps = shap_values[order[thesebins[i]:thesebins[i + 1]], ind]
                 # if there's only one element, then we can't
                 if shaps.shape[0] == 1:

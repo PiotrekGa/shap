@@ -33,7 +33,7 @@ def test_tf_eager():
     import pandas as pd
     import numpy as np
     import tensorflow as tf
-    from shap import DeepExplainer
+    from shap_domino import DeepExplainer
     import datetime
 
     x = pd.DataFrame({ "B": np.random.random(size=(100,)) })
@@ -62,7 +62,7 @@ def test_tf_keras_mnist_cnn():
     from tensorflow.keras.layers import Conv2D, MaxPooling2D
     from tensorflow.keras import backend as K
     import tensorflow as tf
-    import shap
+    import shap_domino
     import numpy as np
 
     tf.compat.v1.disable_eager_execution()
@@ -121,7 +121,7 @@ def test_tf_keras_mnist_cnn():
     # explain by passing the tensorflow inputs and outputs
     np.random.seed(0)
     inds = np.random.choice(x_train.shape[0], 10, replace=False)
-    e = shap.DeepExplainer((model.layers[0].input, model.layers[-1].input), x_train[inds,:,:])
+    e = shap_domino.DeepExplainer((model.layers[0].input, model.layers[-1].input), x_train[inds, :, :])
     shap_values = e.shap_values(x_test[:1])
 
     sess = tf.compat.v1.keras.backend.get_session()
@@ -141,7 +141,7 @@ def test_tf_keras_linear():
     from tensorflow.keras.layers import Dense, Input
     from tensorflow.keras.optimizers import SGD
     import tensorflow as tf
-    import shap
+    import shap_domino
     import numpy as np
 
     tf.compat.v1.disable_eager_execution()
@@ -166,7 +166,7 @@ def test_tf_keras_linear():
     fit_coef = model.layers[1].get_weights()[0].T[0]
 
     # explain
-    e = shap.DeepExplainer((model.layers[0].input, model.layers[-1].output), x)
+    e = shap_domino.DeepExplainer((model.layers[0].input, model.layers[-1].output), x)
     shap_values = e.shap_values(x)
 
     # verify that the explanation follows the equation in LinearExplainer
@@ -190,7 +190,7 @@ def test_tf_keras_imdb_lstm():
     from tensorflow.keras.layers import LSTM
     from tensorflow.keras.layers import Embedding
     from tensorflow.keras.preprocessing import sequence
-    import shap
+    import shap_domino
 
     tf.compat.v1.disable_eager_execution()
 
@@ -227,7 +227,7 @@ def test_tf_keras_imdb_lstm():
     # For debugging, can view graph:
     # writer = tf.compat.v1.summary.FileWriter("c:\\tmp", sess.graph)
     # writer.close()
-    e = shap.DeepExplainer((mod.layers[0].input, mod.layers[-1].output), background)
+    e = shap_domino.DeepExplainer((mod.layers[0].input, mod.layers[-1].output), background)
     shap_values = e.shap_values(testx)
     sums = np.array([shap_values[i].sum() for i in range(len(shap_values))])
     diff = sess.run(mod.layers[-1].output, feed_dict={mod.layers[0].input: testx})[0,:] - \
@@ -246,7 +246,7 @@ def test_pytorch_mnist_cnn():
     from torchvision import datasets, transforms
     from torch import nn
     from torch.nn import functional as F
-    import shap
+    import shap_domino
     import shutil
     import numpy as np
 
@@ -309,9 +309,9 @@ def test_pytorch_mnist_cnn():
         np.random.seed(0)
         inds = np.random.choice(next_x.shape[0], 20, replace=False)
         if interim:
-            e = shap.DeepExplainer((model, model.conv_layers[0]), next_x[inds, :, :, :])
+            e = shap_domino.DeepExplainer((model, model.conv_layers[0]), next_x[inds, :, :, :])
         else:
-            e = shap.DeepExplainer(model, next_x[inds, :, :, :])
+            e = shap_domino.DeepExplainer(model, next_x[inds, :, :, :])
         test_x, test_y = next(iter(test_loader))
         input_tensor = test_x[:1]
         input_tensor.requires_grad = True
@@ -362,7 +362,7 @@ def test_pytorch_custom_nested_models():
     from torch.nn import functional as F
     from torch.utils.data import TensorDataset, DataLoader
     from sklearn.datasets import load_boston
-    import shap
+    import shap_domino
     import numpy as np
 
     X, y = load_boston(return_X_y=True)
@@ -432,7 +432,7 @@ def test_pytorch_custom_nested_models():
     next_x, next_y = next(iter(loader))
     np.random.seed(0)
     inds = np.random.choice(next_x.shape[0], 20, replace=False)
-    e = shap.DeepExplainer(model, next_x[inds, :])
+    e = shap_domino.DeepExplainer(model, next_x[inds, :])
     test_x, test_y = next(iter(loader))
     shap_values = e.shap_values(test_x[:1])
 
@@ -456,7 +456,7 @@ def test_pytorch_single_output():
     from torch.nn import functional as F
     from torch.utils.data import TensorDataset, DataLoader
     from sklearn.datasets import load_boston
-    import shap
+    import shap_domino
     import numpy as np
 
     X, y = load_boston(return_X_y=True)
@@ -503,7 +503,7 @@ def test_pytorch_single_output():
     next_x, next_y = next(iter(loader))
     np.random.seed(0)
     inds = np.random.choice(next_x.shape[0], 20, replace=False)
-    e = shap.DeepExplainer(model, next_x[inds, :])
+    e = shap_domino.DeepExplainer(model, next_x[inds, :])
     test_x, test_y = next(iter(loader))
     shap_values = e.shap_values(test_x[:1])
 
@@ -528,7 +528,7 @@ def test_pytorch_multiple_inputs():
         from torch.nn import functional as F
         from torch.utils.data import TensorDataset, DataLoader
         from sklearn.datasets import load_boston
-        import shap
+        import shap_domino
         import numpy as np
 
         X, y = load_boston(return_X_y=True)
@@ -585,7 +585,7 @@ def test_pytorch_multiple_inputs():
         np.random.seed(0)
         inds = np.random.choice(next_x1.shape[0], 20, replace=False)
         background = [next_x1[inds, :], next_x2[inds, :]]
-        e = shap.DeepExplainer(model, background)
+        e = shap_domino.DeepExplainer(model, background)
         test_x1, test_x2, test_y = next(iter(loader))
         shap_x1, shap_x2 = e.shap_values([test_x1[:1], test_x2[:1]])
 

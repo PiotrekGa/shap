@@ -362,7 +362,7 @@ def draw_additive_plot(data, figsize, show, text_rotation=0):
     width_bar = 0.1
     width_separators = (ax.get_xlim()[1] - ax.get_xlim()[0]) / 200
     
-    # Create bar for negative shap values
+    # Create bar for negative shap_domino values
     rectangle_list, separator_list = draw_bars(out_value, neg_features, 'negative',
                                                width_separators, width_bar)
     for i in rectangle_list:
@@ -371,7 +371,7 @@ def draw_additive_plot(data, figsize, show, text_rotation=0):
     for i in separator_list:
         ax.add_patch(i)
     
-    # Create bar for positive shap values
+    # Create bar for positive shap_domino values
     rectangle_list, separator_list = draw_bars(out_value, pos_features, 'positive',
                                                width_separators, width_bar)
     for i in rectangle_list:

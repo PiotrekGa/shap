@@ -93,7 +93,7 @@ class Tree(Explainer):
             raise Exception("Unsupported masker type: %s!" % str(type(self.masker)))
 
         if getattr(self.masker, "clustering", None) is not None:
-            raise Exception("TreeExplainer does not support clustered data inputs! Please use shap.Explainer or pass an unclustered masker!")
+            raise Exception("TreeExplainer does not support clustered data inputs! Please use shap_domino.Explainer or pass an unclustered masker!")
 
         # check for deprecated options
         if model_output == "margin":
@@ -129,7 +129,7 @@ class Tree(Explainer):
             #warnings.warn("Setting feature_perturbation = \"tree_path_dependent\" because no background data was given.")
         elif feature_perturbation == "interventional" and self.data.shape[0] > 1000:
                 warnings.warn("Passing "+str(self.data.shape[0]) + " background samples may lead to slow runtimes. Consider "
-                    "using shap.sample(data, 100) to create a smaller background data set.")
+                    "using shap_domino.sample(data, 100) to create a smaller background data set.")
         self.data_missing = None if self.data is None else np.isnan(self.data)
         self.feature_perturbation = feature_perturbation
         self.expected_value = None
@@ -167,7 +167,7 @@ class Tree(Explainer):
             except ValueError:
                 raise Exception("Currently TreeExplainer can only handle models with categorical splits when " \
                                 "feature_perturbation=\"tree_path_dependent\" and no background data is passed. Please try again using " \
-                                "shap.TreeExplainer(model, feature_perturbation=\"tree_path_dependent\").")
+                                "shap_domino.TreeExplainer(model, feature_perturbation=\"tree_path_dependent\").")
             if hasattr(self.expected_value, '__len__') and len(self.expected_value) == 1:
                 self.expected_value = self.expected_value[0]
         elif hasattr(self.model, "node_sample_weight"):
@@ -289,7 +289,7 @@ class Tree(Explainer):
                 # Note: the data must be joined on the last axis
                 if self.model.original_model.params['objective'] == 'binary':
                     if not from_call:
-                        warnings.warn('LightGBM binary classifier with TreeExplainer shap values output has changed to a list of ndarray')
+                        warnings.warn('LightGBM binary classifier with TreeExplainer shap_domino values output has changed to a list of ndarray')
                     phi = np.concatenate((0-phi, phi), axis=-1)
                 if phi.shape[1] != X.shape[1] + 1:
                     try:

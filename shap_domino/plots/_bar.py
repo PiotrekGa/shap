@@ -38,7 +38,7 @@ def bar(shap_values, max_display=10, order=Explanation.abs, clustering=None, clu
 
     """
 
-    assert str(type(shap_values)).endswith("Explanation'>"), "The shap_values paramemter must be a shap.Explanation object!"
+    assert str(type(shap_values)).endswith("Explanation'>"), "The shap_values paramemter must be a shap_domino.Explanation object!"
 
     if len(shap_values.shape) == 2:
         shap_values = shap_values.abs.mean(0)
@@ -53,7 +53,7 @@ def bar(shap_values, max_display=10, order=Explanation.abs, clustering=None, clu
     else:
         partition_tree = clustering
     if partition_tree is not None:
-        assert partition_tree.shape[1] == 4, "The clustering provided by the Explanation object does not seem to be a partition tree (which is all shap.plots.bar supports)!"
+        assert partition_tree.shape[1] == 4, "The clustering provided by the Explanation object does not seem to be a partition tree (which is all shap_domino.plots.bar supports)!"
     transform_history = shap_values.transform_history
     values = np.array(shap_values.values)
 

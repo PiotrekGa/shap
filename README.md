@@ -30,22 +30,22 @@ While SHAP can explain the output of any machine learning model, we have develop
 
 ```python
 import xgboost
-import shap
+import shap_domino
 
 # load JS visualization code to notebook
-shap.initjs()
+shap_domino.initjs()
 
 # train XGBoost model
-X,y = shap.datasets.boston()
+X,y = shap_domino.datasets.boston()
 model = xgboost.train({"learning_rate": 0.01}, xgboost.DMatrix(X, label=y), 100)
 
 # explain the model's predictions using SHAP
 # (same syntax works for LightGBM, CatBoost, scikit-learn and spark models)
-explainer = shap.TreeExplainer(model)
+explainer = shap_domino.TreeExplainer(model)
 shap_values = explainer.shap_values(X)
 
 # visualize the first prediction's explanation (use matplotlib=True to avoid Javascript)
-shap.force_plot(explainer.expected_value, shap_values[0,:], X.iloc[0,:])
+shap_domino.force_plot(explainer.expected_value, shap_values[0,:], X.iloc[0,:])
 ```
 
 <p align="center">
@@ -56,19 +56,19 @@ shap.force_plot(explainer.expected_value, shap_values[0,:], X.iloc[0,:])
 ```python
 %matplotlib inline
 import xgboost
-import shap
+import shap_domino
 
 # train XGBoost model
-X,y = shap.datasets.boston()
+X,y = shap_domino.datasets.boston()
 
 model = xgboost.train({"learning_rate": 0.01}, xgboost.DMatrix(X, label=y), 100)
 # explain the model's predictions using SHAP
 # (same syntax works for LightGBM, CatBoost, scikit-learn and spark models)
-explainer = shap.TreeExplainer(model)
+explainer = shap_domino.TreeExplainer(model)
 shap_values = explainer.shap_values(X)
 # visualize the first prediction's explanation using matplotlib (no javascript needed)
 # rotate the annotations so that they are legible when you have really long attribute names
-shap.force_plot(
+shap_domino.force_plot(
     explainer.expected_value, 
     shap_values[0, :], 
     X.iloc[0, :], 
@@ -135,20 +135,20 @@ Deep SHAP is a high-speed approximation algorithm for SHAP values in deep learni
 ```python
 # ...include code from https://github.com/keras-team/keras/blob/master/examples/mnist_cnn.py
 
-import shap
+import shap_domino
 import numpy as np
 
 # select a set of background examples to take an expectation over
 background = x_train[np.random.choice(x_train.shape[0], 100, replace=False)]
 
 # explain predictions of the model on four images
-e = shap.DeepExplainer(model, background)
+e = shap_domino.DeepExplainer(model, background)
 # ...or pass tensors directly
-# e = shap.DeepExplainer((model.layers[0].input, model.layers[-1].output), background)
+# e = shap_domino.DeepExplainer((model.layers[0].input, model.layers[-1].output), background)
 shap_values = e.shap_values(x_test[1:5])
 
 # plot the feature attributions
-shap.image_plot(shap_values, -x_test[1:5])
+shap_domino.image_plot(shap_values, -x_test[1:5])
 ```
 
 <p align="center">
@@ -168,16 +168,16 @@ from keras.applications.vgg16 import preprocess_input
 import keras.backend as K
 import numpy as np
 import json
-import shap
+import shap_domino
 
 # load pre-trained model and choose two images to explain
 model = VGG16(weights='imagenet', include_top=True)
-X,y = shap.datasets.imagenet50()
+X,y = shap_domino.datasets.imagenet50()
 to_explain = X[[39,41]]
 
 # load the ImageNet class names
 url = "https://s3.amazonaws.com/deep-learning-models/image-models/imagenet_class_index.json"
-fname = shap.datasets.cache(url)
+fname = shap_domino.datasets.cache(url)
 with open(fname) as f:
     class_names = json.load(f)
 
@@ -185,7 +185,7 @@ with open(fname) as f:
 def map2layer(x, layer):
     feed_dict = dict(zip([model.layers[0].input], [preprocess_input(x.copy())]))
     return K.get_session().run(model.layers[layer].input, feed_dict)
-e = shap.GradientExplainer(
+e = shap_domino.GradientExplainer(
     (model.layers[7].input, model.layers[-1].output),
     map2layer(X, 7),
     local_smoothing=0 # std dev of smoothing noise
@@ -196,7 +196,7 @@ shap_values,indexes = e.shap_values(map2layer(to_explain, 7), ranked_outputs=2)
 index_names = np.vectorize(lambda x: class_names[str(x)][1])(indexes)
 
 # plot the explanations
-shap.image_plot(shap_values, to_explain, index_names)
+shap_domino.image_plot(shap_values, to_explain, index_names)
 ```
 
 <p align="center">
@@ -211,23 +211,23 @@ Kernel SHAP uses a specially-weighted local linear regression to estimate SHAP v
 
 ```python
 import sklearn
-import shap
+import shap_domino
 from sklearn.model_selection import train_test_split
 
 # print the JS visualization code to the notebook
-shap.initjs()
+shap_domino.initjs()
 
 # train a SVM classifier
-X_train,X_test,Y_train,Y_test = train_test_split(*shap.datasets.iris(), test_size=0.2, random_state=0)
+X_train,X_test,Y_train,Y_test = train_test_split(*shap_domino.datasets.iris(), test_size=0.2, random_state=0)
 svm = sklearn.svm.SVC(kernel='rbf', probability=True)
 svm.fit(X_train, Y_train)
 
 # use Kernel SHAP to explain test set predictions
-explainer = shap.KernelExplainer(svm.predict_proba, X_train, link="logit")
+explainer = shap_domino.KernelExplainer(svm.predict_proba, X_train, link="logit")
 shap_values = explainer.shap_values(X_test, nsamples=100)
 
 # plot the SHAP values for the Setosa output of the first instance
-shap.force_plot(explainer.expected_value[0], shap_values[0][0,:], X_test.iloc[0,:], link="logit")
+shap_domino.force_plot(explainer.expected_value[0], shap_values[0][0,:], X_test.iloc[0,:], link="logit")
 ```
 <p align="center">
   <img width="810" src="https://raw.githubusercontent.com/slundberg/shap/master/docs/artwork/iris_instance.png" />

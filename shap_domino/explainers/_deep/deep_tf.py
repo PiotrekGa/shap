@@ -1,8 +1,8 @@
 import numpy as np
 import warnings
-from shap.explainers._explainer import Explainer
+from shap_domino.explainers._explainer import Explainer
 from distutils.version import LooseVersion
-from shap.explainers.tf_utils import _get_session, _get_graph, _get_model_inputs, _get_model_output
+from shap_domino.explainers.tf_utils import _get_session, _get_graph, _get_model_inputs, _get_model_output
 keras = None
 tf = None
 tf_ops = None

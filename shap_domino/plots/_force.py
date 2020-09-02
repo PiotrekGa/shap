@@ -83,9 +83,9 @@ def force(base_value, shap_values=None, features=None, feature_names=None, out_n
     if (type(base_value) == np.ndarray or type(base_value) == list):
         if type(shap_values) != list or len(shap_values) != len(base_value):
             raise Exception("In v0.20 force_plot now requires the base value as the first parameter! " \
-                            "Try shap.force_plot(explainer.expected_value, shap_values) or " \
+                            "Try shap_domino.force_plot(explainer.expected_value, shap_values) or " \
                             "for multi-output models try " \
-                            "shap.force_plot(explainer.expected_value[0], shap_values[0]).")
+                            "shap_domino.force_plot(explainer.expected_value[0], shap_values[0]).")
 
 
     assert not type(shap_values) == list, "The shap_values arg looks looks multi output, try shap_values[i]."
@@ -155,7 +155,7 @@ def force(base_value, shap_values=None, features=None, feature_names=None, out_n
             raise Exception("matplotlib = True is not yet supported for force plots with multiple samples!")
         
         if shap_values.shape[0] > 3000:
-            warnings.warn("shap.plots.force is slow for many thousands of rows, try subsampling your data.")
+            warnings.warn("shap_domino.plots.force is slow for many thousands of rows, try subsampling your data.")
 
         exps = []
         for k in range(shap_values.shape[0]):
@@ -226,7 +226,7 @@ def getjs():
 
 
 def initjs():
-    assert have_ipython, "IPython must be installed to use initjs()! Run `pip install ipython` and then restart shap."
+    assert have_ipython, "IPython must be installed to use initjs()! Run `pip install ipython` and then restart shap_domino."
     logo_path = os.path.join(os.path.split(__file__)[0], "resources", "logoSmallGray.png")
     with open(logo_path, "rb") as f:
         logo_data = f.read()
@@ -245,14 +245,14 @@ def save_html(out_file, plot, full_html=True):
     out_file : str or file
         Location or file to be written to
     plot : BaseVisualizer
-        Visualizer returned by shap.force_plot()
+        Visualizer returned by shap_domino.force_plot()
     full_html : boolean (default: True)
         If True, writes a complete HTML document starting 
         with an <html> tag. If False, only script and div
         tags are included.
     """
 
-    assert isinstance(plot, BaseVisualizer), "save_html requires a Visualizer returned by shap.force_plot()."
+    assert isinstance(plot, BaseVisualizer), "save_html requires a Visualizer returned by shap_domino.force_plot()."
     internal_open = False
     if type(out_file) == str:
         out_file = open(out_file, "w", encoding="utf-8")
@@ -351,7 +351,7 @@ class SimpleListVisualizer(BaseVisualizer):
         }
 
     def html(self):
-        # assert have_ipython, "IPython must be installed to use this visualizer! Run `pip install ipython` and then restart shap."
+        # assert have_ipython, "IPython must be installed to use this visualizer! Run `pip install ipython` and then restart shap_domino."
         return """
 <div id='{id}'>{err_msg}</div>
  <script>
@@ -388,7 +388,7 @@ class AdditiveForceVisualizer(BaseVisualizer):
         }
 
     def html(self, label_margin=20):
-        # assert have_ipython, "IPython must be installed to use this visualizer! Run `pip install ipython` and then restart shap."
+        # assert have_ipython, "IPython must be installed to use this visualizer! Run `pip install ipython` and then restart shap_domino."
         self.data["labelMargin"] = label_margin
         return """
 <div id='{id}'>{err_msg}</div>
@@ -448,7 +448,7 @@ class AdditiveForceArrayVisualizer(BaseVisualizer):
                 }
 
     def html(self):
-        # assert have_ipython, "IPython must be installed to use this visualizer! Run `pip install ipython` and then restart shap."
+        # assert have_ipython, "IPython must be installed to use this visualizer! Run `pip install ipython` and then restart shap_domino."
         return """
 <div id='{id}'>{err_msg}</div>
  <script>

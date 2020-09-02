@@ -1,6 +1,6 @@
 from .deep_pytorch import PyTorchDeep
 from .deep_tf import TFDeep
-from shap.explainers._explainer import Explainer
+from shap_domino.explainers._explainer import Explainer
 
 
 class Deep(Explainer):
@@ -35,7 +35,7 @@ class Deep(Explainer):
                 where both are nn.Module objects
             The model is an nn.Module object which takes as input a tensor (or list of tensors) of
             shape data, and returns a single dimensional output.
-            If the input is a tuple, the returned shap values will be for the input of the
+            If the input is a tuple, the returned shap_domino values will be for the input of the
             layer argument. layer must be a layer in the model, i.e. model.conv2
 
         data :

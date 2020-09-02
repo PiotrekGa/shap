@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import logging
 
-log = logging.getLogger('shap')
+log = logging.getLogger('shap_domino')
 
 
 class Sampling(Kernel):

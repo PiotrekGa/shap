@@ -64,7 +64,7 @@ class MimicExplainer(Explainer):
         if len(self.data.weights) < 100:
             log.warning("Using only " + str(len(self.data.weights)) + " training data samples could cause " +
                         "the mimic model poorly to fit the real model. Consider using more training samples " +
-                        "or if you don't have more samples, using shap.inflate(data, N) to generate more.")
+                        "or if you don't have more samples, using shap_domino.inflate(data, N) to generate more.")
 
         self._train_mimic_model()
 

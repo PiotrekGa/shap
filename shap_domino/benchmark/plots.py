@@ -500,7 +500,7 @@ def plot_grids(dataset, model_names, out_dir=None):
 #             if i == 0:
 #                 out += "<td rowspan='%d' style='background: #fff; text-align: center; white-space: nowrap; vertical-align: middle; '><div style='font-weight: bold; transform: rotate(-90deg); transform-origin: left top 0; width: 1.5em; margin-top: 8em'>%s</div></td>" % (data.shape[0], model_name)
             method_title = getattr(methods, row_keys[i]).__doc__.split("\n")[0].strip()
-            out += "<td style='background: #ffffff; text-align: right; width: 250px' title='shap.LinearExplainer(model)'>" + method_title + "</td>\n"
+            out += "<td style='background: #ffffff; text-align: right; width: 250px' title='shap_domino.LinearExplainer(model)'>" + method_title + "</td>\n"
             for j in range(data.shape[1]):
                 plot_id = "plot__"+dataset+"__"+model+"__"+col_keys[j]
                 out += "<td onclick='document.getElementById(\"%s\").style.display = \"block\"' style='padding: 0px; padding-left: 0px; padding-right: 0px; border-left: 0px solid #999; width: 42px; min-width: 42px; height: 34px; background-color: #fff'>" % plot_id

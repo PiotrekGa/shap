@@ -11,7 +11,7 @@ import sys
 from numba import jit
 from .. import links
 
-log = logging.getLogger('shap')
+log = logging.getLogger('shap_domino')
 
 
 class Exact(Explainer):
@@ -39,11 +39,11 @@ class Exact(Explainer):
             masked samples are evaluated using the model function and the outputs are then averaged.
             As a shortcut for the standard masking used by SHAP you can pass a background data matrix
             instead of a function and that matrix will be used for masking. To use a clustering
-            game structure you can pass a shap.maskers.TabularPartitions(data) object.
+            game structure you can pass a shap_domino.maskers.TabularPartitions(data) object.
 
         link : function
             The link function used to map between the output units of the model and the SHAP value units. By
-            default it is shap.links.identity, but shap.links.logit can be useful so that expectations are
+            default it is shap_domino.links.identity, but shap_domino.links.logit can be useful so that expectations are
             computed in probability units while explanations remain in the (more naturally additive) log-odds
             units. For more details on how link functions work see any overview of link functions for generalized
             linear models.

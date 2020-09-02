@@ -15,7 +15,7 @@ def heatmap(shap_values, instance_order=Explanation.hclust(), feature_values=Exp
 
     This plot is designed to show the population substructure of a dataset using supervised
     clustering and a heatmap. Supervised clustering involves clustering data points not by their original
-    feature values but by their explanations. By default we cluster using shap.utils.hclust_ordering
+    feature values but by their explanations. By default we cluster using shap_domino.utils.hclust_ordering
     but any clustering can be used to order the samples.
 
     Parameters

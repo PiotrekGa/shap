@@ -180,7 +180,7 @@ def hclust(X, y=None, linkage="complete", metric="auto", random_state=0):
         dist = retrain_hclustering(X, y, model=xgboost_r2, random_state=random_state)
     else:
         if y is not None:
-            warnings.warn("Ignoring the y argument passed to shap.utils.hclust since the given clustering metric is not based on label fitting!")
+            warnings.warn("Ignoring the y argument passed to shap_domino.utils.hclust since the given clustering metric is not based on label fitting!")
         if safe_isinstance(X, "pandas.core.frame.DataFrame"):
             bg_no_nan = X.values.copy()
         else:

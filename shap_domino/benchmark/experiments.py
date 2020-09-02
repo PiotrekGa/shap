@@ -331,7 +331,7 @@ def run_remote_experiments(experiments, thread_hosts, rate_limit=10):
     Parameters
     ----------
     experiments : iterable
-        Output of shap.benchmark.experiments(...).
+        Output of shap_domino.benchmark.experiments(...).
 
     thread_hosts : list of strings
         Each host has the format "host_name:path_to_python_binary" and can appear multiple times
@@ -351,7 +351,7 @@ def run_remote_experiments(experiments, thread_hosts, rate_limit=10):
     for host in set(thread_hosts):
         hostname,_ = host.split(":")
         try:
-            subprocess.run(["ssh", hostname, "pkill -f shap.benchmark.run_experiment"], timeout=15)
+            subprocess.run(["ssh", hostname, "pkill -f shap_domino.benchmark.run_experiment"], timeout=15)
         except subprocess.TimeoutExpired:
             print("Failed to connect to", hostname, "after 15 seconds! Exiting.")
             return
@@ -393,7 +393,7 @@ def __run_remote_experiment(experiment, remote, cache_dir="/tmp", python_binary=
 
     # run the benchmark on the remote machine
     #start = time.time()
-    cmd = "CUDA_VISIBLE_DEVICES=\"\" "+python_binary+" -c \"import shap; shap.benchmark.run_experiment(['%s', '%s', '%s', '%s'], cache_dir='%s')\" &> %s/%s.output" % (
+    cmd = "CUDA_VISIBLE_DEVICES=\"\" "+python_binary+" -c \"import shap_domino; shap_domino.benchmark.run_experiment(['%s', '%s', '%s', '%s'], cache_dir='%s')\" &> %s/%s.output" % (
         dataset_name, model_name, method_name, metric_name, cache_dir, cache_dir, cache_id
     )
     try:

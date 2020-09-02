@@ -8,43 +8,43 @@ def test_front_page_xgboost():
     except:
         print("Skipping test_front_page_xgboost!")
         return
-    import shap
+    import shap_domino
     import numpy as np
 
     # load JS visualization code to notebook
-    shap.initjs()
+    shap_domino.initjs()
 
     # train XGBoost model
-    X, y = shap.datasets.boston()
+    X, y = shap_domino.datasets.boston()
     model = xgboost.train({"learning_rate": 0.01, "silent": 1}, xgboost.DMatrix(X, label=y), 100)
 
     # explain the model's predictions using SHAP values
-    explainer = shap.TreeExplainer(model)
+    explainer = shap_domino.TreeExplainer(model)
     shap_values = explainer.shap_values(X)
 
     # visualize the first prediction's explaination
-    shap.force_plot(explainer.expected_value, shap_values[0, :], X.iloc[0, :])
+    shap_domino.force_plot(explainer.expected_value, shap_values[0, :], X.iloc[0, :])
 
     # visualize the training set predictions
-    shap.force_plot(explainer.expected_value, shap_values, X)
+    shap_domino.force_plot(explainer.expected_value, shap_values, X)
 
     # create a SHAP dependence plot to show the effect of a single feature across the whole dataset
-    shap.dependence_plot(5, shap_values, X, show=False)
-    shap.dependence_plot("RM", shap_values, X, show=False)
+    shap_domino.dependence_plot(5, shap_values, X, show=False)
+    shap_domino.dependence_plot("RM", shap_values, X, show=False)
 
     # summarize the effects of all the features
-    shap.summary_plot(shap_values, X, show=False)
+    shap_domino.summary_plot(shap_values, X, show=False)
 
 def test_front_page_sklearn():
     import sklearn.ensemble
-    import shap
+    import shap_domino
     import numpy as np
 
     # load JS visualization code to notebook
-    shap.initjs()
+    shap_domino.initjs()
 
     # train model
-    X, y = shap.datasets.boston()
+    X, y = shap_domino.datasets.boston()
     models = [
         sklearn.ensemble.RandomForestRegressor(n_estimators=100),
         sklearn.ensemble.ExtraTreesRegressor(n_estimators=100),
@@ -53,21 +53,21 @@ def test_front_page_sklearn():
         model.fit(X, y)
 
         # explain the model's predictions using SHAP values
-        explainer = shap.TreeExplainer(model)
+        explainer = shap_domino.TreeExplainer(model)
         shap_values = explainer.shap_values(X)
 
         # visualize the first prediction's explaination
-        shap.force_plot(explainer.expected_value, shap_values[0, :], X.iloc[0, :])
+        shap_domino.force_plot(explainer.expected_value, shap_values[0, :], X.iloc[0, :])
 
         # visualize the training set predictions
-        shap.force_plot(explainer.expected_value, shap_values, X)
+        shap_domino.force_plot(explainer.expected_value, shap_values, X)
 
         # create a SHAP dependence plot to show the effect of a single feature across the whole dataset
-        shap.dependence_plot(5, shap_values, X, show=False)
-        shap.dependence_plot("RM", shap_values, X, show=False)
+        shap_domino.dependence_plot(5, shap_values, X, show=False)
+        shap_domino.dependence_plot("RM", shap_values, X, show=False)
 
         # summarize the effects of all the features
-        shap.summary_plot(shap_values, X, show=False)
+        shap_domino.summary_plot(shap_values, X, show=False)
 
 def _conditional_expectation(tree, S, x):
     tree_ind = 0
@@ -113,7 +113,7 @@ def test_xgboost_direct():
     except:
         print("Skipping test_xgboost_direct!")
         return
-    import shap
+    import shap_domino
     import numpy as np
 
     N = 100
@@ -124,7 +124,7 @@ def test_xgboost_direct():
     model = xgboost.XGBRegressor()
     model.fit(X, y)
 
-    explainer = shap.TreeExplainer(model)
+    explainer = shap_domino.TreeExplainer(model)
     shap_values = explainer.shap_values(X)
 
     assert np.allclose(shap_values[0,:], _brute_force_tree_shap(explainer.model, X[0,:]))
@@ -135,26 +135,26 @@ def test_xgboost_multiclass():
     except:
         print("Skipping test_xgboost_multiclass!")
         return
-    import shap
+    import shap_domino
     import numpy as np
 
     # train XGBoost model
-    X, Y = shap.datasets.iris()
+    X, Y = shap_domino.datasets.iris()
     model = xgboost.XGBClassifier(objective="binary:logistic", max_depth=4)
     model.fit(X, Y)
 
     # explain the model's predictions using SHAP values (use pred_contrib in LightGBM)
-    shap_values = shap.TreeExplainer(model).shap_values(X)
+    shap_values = shap_domino.TreeExplainer(model).shap_values(X)
 
     # ensure plot works for first class
-    shap.dependence_plot(0, shap_values[0], X, show=False)
+    shap_domino.dependence_plot(0, shap_values[0], X, show=False)
 
 def _validate_shap_values(model, x_test):
-    import shap
+    import shap_domino
     import numpy as np
 
     # explain the model's predictions using SHAP values
-    tree_explainer = shap.TreeExplainer(model)
+    tree_explainer = shap_domino.TreeExplainer(model)
     shap_values = tree_explainer.shap_values(x_test)
     expected_values = tree_explainer.expected_value
     # validate values sum to the margin prediction of the model plus expected_value
@@ -166,11 +166,11 @@ def test_xgboost_ranking():
     except:
         print("Skipping test_xgboost_ranking!")
         return
-    import shap
+    import shap_domino
     import numpy as np
 
     # train lightgbm ranker model
-    x_train, y_train, x_test, y_test, q_train, q_test = shap.datasets.rank()
+    x_train, y_train, x_test, y_test, q_train, q_test = shap_domino.datasets.rank()
     params = {'objective': 'rank:pairwise', 'learning_rate': 0.1,
               'gamma': 1.0, 'min_child_weight': 0.1,
               'max_depth': 4, 'n_estimators': 4}
@@ -185,15 +185,15 @@ def test_xgboost_mixed_types():
     except:
         print("Skipping test_xgboost_mixed_types!")
         return
-    import shap
+    import shap_domino
     import numpy as np
 
-    X,y = shap.datasets.boston()
+    X,y = shap_domino.datasets.boston()
     X["LSTAT"] = X["LSTAT"].astype(np.int64)
     X["B"] = X["B"].astype(np.bool)
     bst = xgboost.train({"learning_rate": 0.01, "silent": 1}, xgboost.DMatrix(X, label=y), 1000)
-    shap_values = shap.TreeExplainer(bst).shap_values(X)
-    shap.dependence_plot(0, shap_values, X, show=False)
+    shap_values = shap_domino.TreeExplainer(bst).shap_values(X)
+    shap_domino.dependence_plot(0, shap_values, X, show=False)
 
 def test_ngboost():
     try:
@@ -201,12 +201,12 @@ def test_ngboost():
     except:
         print("Skipping test_ngboost!")
         return
-    import shap
+    import shap_domino
     import numpy as np
 
-    X,y = shap.datasets.boston()
+    X,y = shap_domino.datasets.boston()
     model = ngboost.NGBRegressor(n_estimators=20).fit(X, y)
-    explainer = shap.TreeExplainer(model, model_output=0)
+    explainer = shap_domino.TreeExplainer(model, model_output=0)
     assert np.max(np.abs(explainer.shap_values(X).sum(1) + explainer.expected_value - model.predict(X))) < 1e-5
 
 def test_pyspark_classifier_decision_tree():
@@ -226,7 +226,7 @@ def test_pyspark_classifier_decision_tree():
     except:
         print("Skipping test_pyspark_classifier_decision_tree!")
         return
-    import shap
+    import shap_domino
     import numpy as np
 
     col = ["sepal_length","sepal_width","petal_length","petal_width","type"]
@@ -239,8 +239,8 @@ def test_pyspark_classifier_decision_tree():
                    DecisionTreeClassifier(labelCol="label", featuresCol="features")]
     for classifier in classifiers:
         model = classifier.fit(iris)
-        explainer = shap.TreeExplainer(model)
-        #Make sure the model can be serializable to run shap values with spark
+        explainer = shap_domino.TreeExplainer(model)
+        #Make sure the model can be serializable to run shap_domino values with spark
         pickle.dumps(explainer)
         X = pd.DataFrame(data=iris_sk.data, columns=iris_sk.feature_names)[:100] # pylint: disable=E1101
 
@@ -278,7 +278,7 @@ def test_pyspark_regression_decision_tree():
     except:
         print("Skipping test_pyspark_regression_decision_tree!")
         return
-    import shap
+    import shap_domino
     import numpy as np
 
     # Simple regressor: try to predict sepal length based on the other features
@@ -291,7 +291,7 @@ def test_pyspark_regression_decision_tree():
                   DecisionTreeRegressor(labelCol="sepal_length", featuresCol="features")]
     for regressor in regressors:
         model = regressor.fit(iris)
-        explainer = shap.TreeExplainer(model)
+        explainer = shap_domino.TreeExplainer(model)
         X = pd.DataFrame(data=iris_sk.data, columns=iris_sk.feature_names).drop('sepal length (cm)', 1)[:100] # pylint: disable=E1101
 
         shap_values = explainer.shap_values(X)
@@ -305,16 +305,16 @@ def test_pyspark_regression_decision_tree():
     spark.stop()
 
 def test_sklearn_random_forest_multiclass():
-    import shap
+    import shap_domino
     from sklearn.ensemble import RandomForestClassifier
     import numpy as np
 
-    X, y = shap.datasets.iris()
+    X, y = shap_domino.datasets.iris()
     y[y == 2] = 1
     model = RandomForestClassifier(n_estimators=100, max_depth=None, min_samples_split=2, random_state=0)
     model.fit(X, y)
 
-    explainer = shap.TreeExplainer(model)
+    explainer = shap_domino.TreeExplainer(model)
     shap_values = explainer.shap_values(X)
 
     assert np.abs(shap_values[0][0,0] - 0.05) < 1e-3
@@ -347,7 +347,7 @@ def create_random_forest_vectorizer():
     return Pipeline([('vectorizer', vectorizer), ('to_dense', DenseTransformer()), ('rf', rf)])
 
 def test_sklearn_random_forest_newsgroups():
-    import shap
+    import shap_domino
     import numpy as np
     #from sklearn.ensemble import RandomForestClassifier
 
@@ -362,22 +362,22 @@ def test_sklearn_random_forest_newsgroups():
     dense_bg = densifier.transform(vectorizer.transform(newsgroups_test.data[0:20]))
 
     test_row = newsgroups_test.data[83:84]
-    explainer = shap.TreeExplainer(rf, dense_bg, feature_perturbation="interventional")
+    explainer = shap_domino.TreeExplainer(rf, dense_bg, feature_perturbation="interventional")
     vec_row = vectorizer.transform(test_row)
     dense_row = densifier.transform(vec_row)
     explainer.shap_values(dense_row)
 
 def test_sklearn_decision_tree_multiclass():
-    import shap
+    import shap_domino
     from sklearn.tree import DecisionTreeClassifier
     import numpy as np
 
-    X, y = shap.datasets.iris()
+    X, y = shap_domino.datasets.iris()
     y[y == 2] = 1
     model = DecisionTreeClassifier(max_depth=None, min_samples_split=2, random_state=0)
     model.fit(X, y)
 
-    explainer = shap.TreeExplainer(model)
+    explainer = shap_domino.TreeExplainer(model)
     shap_values = explainer.shap_values(X)
     assert np.abs(shap_values[0][0,0] - 0.05) < 1e-1
     assert np.abs(shap_values[1][0,0] + 0.05) < 1e-1
@@ -388,16 +388,16 @@ def test_lightgbm():
     except:
         print("Skipping test_lightgbm!")
         return
-    import shap
+    import shap_domino
     import numpy as np
 
     # train lightgbm model
-    X, y = shap.datasets.boston()
+    X, y = shap_domino.datasets.boston()
     model = lightgbm.sklearn.LGBMRegressor(categorical_feature=[8])
     model.fit(X, y)
 
     # explain the model's predictions using SHAP values
-    ex = shap.TreeExplainer(model)
+    ex = shap_domino.TreeExplainer(model)
     shap_values = ex.shap_values(X)
 
     predicted = model.predict(X, raw_score=True)
@@ -411,16 +411,16 @@ def test_gpboost():
     except:
         print("Skipping test_gpboost!")
         return
-    import shap
+    import shap_domino
 
     # train gpboost model
-    X, y = shap.datasets.boston()
+    X, y = shap_domino.datasets.boston()
     data_train = gpboost.Dataset(X, y, categorical_feature=[8])
     model = gpboost.train(params={'objective': 'regression_l2', 'learning_rate': 0.1, 'verbose': 0},
                           train_set=data_train, num_boost_round=10)
 
     # explain the model's predictions using SHAP values
-    ex = shap.TreeExplainer(model, feature_perturbation="tree_path_dependent")
+    ex = shap_domino.TreeExplainer(model, feature_perturbation="tree_path_dependent")
     shap_values = ex.shap_values(X)
 
     predicted = model.predict(X, raw_score=True)
@@ -435,18 +435,18 @@ def test_catboost():
     except:
         print("Skipping test_catboost!")
         return
-    import shap
+    import shap_domino
     import numpy as np
 
     # train catboost model
-    X, y = shap.datasets.boston()
+    X, y = shap_domino.datasets.boston()
     X["RAD"] = X["RAD"].astype(np.int)
     model = catboost.CatBoostRegressor(iterations=300, learning_rate=0.1, random_seed=123)
     p = catboost.Pool(X, y, cat_features=["RAD"])
     model.fit(p, verbose=False, plot=False)
 
     # explain the model's predictions using SHAP values
-    ex = shap.TreeExplainer(model)
+    ex = shap_domino.TreeExplainer(model)
     shap_values = ex.shap_values(p)
 
     predicted = model.predict(X)
@@ -468,7 +468,7 @@ def test_catboost():
         verbose=False,
         plot=False
     )
-    shap.TreeExplainer(model)
+    shap_domino.TreeExplainer(model)
 
 def test_catboost_categorical():
     try:
@@ -477,7 +477,7 @@ def test_catboost_categorical():
     except:
         print("Skipping test_catboost!")
         return
-    import shap
+    import shap_domino
     import pandas as pd
     from sklearn.datasets import load_boston
     import numpy as np
@@ -490,7 +490,7 @@ def test_catboost_categorical():
     model = catboost.CatBoostRegressor(100, cat_features=['CHAS'], verbose=False)
     model.fit(X, y)
 
-    explainer = shap.TreeExplainer(model)
+    explainer = shap_domino.TreeExplainer(model)
     shap_values = explainer.shap_values(X)
 
     predicted = model.predict(X)
@@ -509,11 +509,11 @@ def test_lightgbm_constant_prediction():
     except:
         print("Skipping test_lightgbm_constant_prediction!")
         return
-    import shap
+    import shap_domino
     import numpy as np
 
     # train lightgbm model with a constant value for y
-    X, y = shap.datasets.boston()
+    X, y = shap_domino.datasets.boston()
     # use the mean for all values
     mean = np.mean(y)
     y.fill(mean)
@@ -521,7 +521,7 @@ def test_lightgbm_constant_prediction():
     model.fit(X, y)
 
     # explain the model's predictions using SHAP values
-    shap.TreeExplainer(model).shap_values(X)
+    shap_domino.TreeExplainer(model).shap_values(X)
 
 def test_lightgbm_constant_multiclass():
     # note: this test used to fail with lightgbm 2.2.1 with error:
@@ -534,17 +534,17 @@ def test_lightgbm_constant_multiclass():
     except:
         print("Skipping test_lightgbm_constant_multiclass!")
         return
-    import shap
+    import shap_domino
     import numpy as np
 
     # train lightgbm model
-    X, Y = shap.datasets.iris()
+    X, Y = shap_domino.datasets.iris()
     Y.fill(1)
     model = lightgbm.sklearn.LGBMClassifier(num_classes=3, objective="multiclass")
     model.fit(X, Y)
 
     # explain the model's predictions using SHAP values
-    shap.TreeExplainer(model).shap_values(X)
+    shap_domino.TreeExplainer(model).shap_values(X)
 
 def test_lightgbm_multiclass():
     try:
@@ -552,19 +552,19 @@ def test_lightgbm_multiclass():
     except:
         print("Skipping test_lightgbm_multiclass!")
         return
-    import shap
+    import shap_domino
     import numpy as np
 
     # train lightgbm model
-    X, Y = shap.datasets.iris()
+    X, Y = shap_domino.datasets.iris()
     model = lightgbm.sklearn.LGBMClassifier()
     model.fit(X, Y)
 
     # explain the model's predictions using SHAP values
-    shap_values = shap.TreeExplainer(model).shap_values(X)
+    shap_values = shap_domino.TreeExplainer(model).shap_values(X)
 
     # ensure plot works for first class
-    shap.dependence_plot(0, shap_values[0], X, show=False)
+    shap_domino.dependence_plot(0, shap_values[0], X, show=False)
 
 def test_lightgbm_binary():
     try:
@@ -572,23 +572,23 @@ def test_lightgbm_binary():
     except:
         print("Skipping test_lightgbm_binary!")
         return
-    import shap
+    import shap_domino
     from sklearn.model_selection import train_test_split
 
     # train lightgbm model
-    X_train,X_test,Y_train,_ = train_test_split(*shap.datasets.adult(), test_size=0.2, random_state=0)
+    X_train,X_test,Y_train,_ = train_test_split(*shap_domino.datasets.adult(), test_size=0.2, random_state=0)
     model = lightgbm.sklearn.LGBMClassifier()
     model.fit(X_train, Y_train)
 
     # explain the model's predictions using SHAP values
-    shap_values = shap.TreeExplainer(model).shap_values(X_test)
+    shap_values = shap_domino.TreeExplainer(model).shap_values(X_test)
 
-    # validate structure of shap values, must be a list of ndarray for both classes
+    # validate structure of shap_domino values, must be a list of ndarray for both classes
     assert isinstance(shap_values, list)
     assert len(shap_values) == 2
 
     # ensure plot works for first class
-    shap.dependence_plot(0, shap_values[0], X_test, show=False)
+    shap_domino.dependence_plot(0, shap_values[0], X_test, show=False)
 
 # def test_lightgbm_ranking():
 #     try:
@@ -596,11 +596,11 @@ def test_lightgbm_binary():
 #     except:
 #         print("Skipping test_lightgbm_ranking!")
 #         return
-#     import shap
+#     import shap_domino
 #     import numpy as np
 
 #     # train lightgbm ranker model
-#     x_train, y_train, x_test, y_test, q_train, q_test = shap.datasets.rank()
+#     x_train, y_train, x_test, y_test, q_train, q_test = shap_domino.datasets.rank()
 #     model = lightgbm.LGBMRanker()
 #     model.fit(x_train, y_train, group=q_train, eval_set=[(x_test, y_test)],
 #               eval_group=[q_test], eval_at=[1, 3], early_stopping_rounds=5, verbose=False,
@@ -614,16 +614,16 @@ def test_sklearn_interaction():
     from sklearn.model_selection import train_test_split
     from sklearn.ensemble import RandomForestClassifier
     import numpy as np
-    import shap
+    import shap_domino
 
     # train a simple sklean RF model on the iris dataset
-    X, _ = shap.datasets.iris()
-    X_train,_,Y_train,_ = train_test_split(*shap.datasets.iris(), test_size=0.2, random_state=0)
+    X, _ = shap_domino.datasets.iris()
+    X_train,_,Y_train,_ = train_test_split(*shap_domino.datasets.iris(), test_size=0.2, random_state=0)
     rforest = RandomForestClassifier(n_estimators=100, max_depth=None, min_samples_split=2, random_state=0)
     model = rforest.fit(X_train, Y_train)
 
     # verify symmetry of the interaction values (this typically breaks if anything is wrong)
-    interaction_vals = shap.TreeExplainer(model).shap_interaction_values(X)
+    interaction_vals = shap_domino.TreeExplainer(model).shap_interaction_values(X)
     for i in range(len(interaction_vals)):
         for j in range(len(interaction_vals[i])):
             for k in range(len(interaction_vals[i][j])):
@@ -631,7 +631,7 @@ def test_sklearn_interaction():
                     assert abs(interaction_vals[i][j][k][l] - interaction_vals[i][j][l][k]) < 1e-4
 
     # ensure the interaction plot works
-    shap.summary_plot(interaction_vals[0], X, show=False)
+    shap_domino.summary_plot(interaction_vals[0], X, show=False)
 
 def test_lightgbm_interaction():
     try:
@@ -639,77 +639,77 @@ def test_lightgbm_interaction():
     except:
         print("Skipping test_lightgbm_interaction!")
         return
-    import shap
+    import shap_domino
     import numpy as np
 
     # train XGBoost model
-    X, y = shap.datasets.boston()
+    X, y = shap_domino.datasets.boston()
     model = lightgbm.sklearn.LGBMRegressor()
     model.fit(X, y)
 
     # verify symmetry of the interaction values (this typically breaks if anything is wrong)
-    interaction_vals = shap.TreeExplainer(model).shap_interaction_values(X)
+    interaction_vals = shap_domino.TreeExplainer(model).shap_interaction_values(X)
     for j in range(len(interaction_vals)):
         for k in range(len(interaction_vals[j])):
             for l in range(len(interaction_vals[j][k])):
                 assert abs(interaction_vals[j][k][l] - interaction_vals[j][l][k]) < 1e-4
 
 def test_sum_match_random_forest():
-    import shap
+    import shap_domino
     import numpy as np
     from sklearn.model_selection import train_test_split
     from sklearn.ensemble import RandomForestClassifier
     import sklearn
 
-    X_train,X_test,Y_train,_ = train_test_split(*shap.datasets.adult(), test_size=0.2, random_state=0)
+    X_train,X_test,Y_train,_ = train_test_split(*shap_domino.datasets.adult(), test_size=0.2, random_state=0)
     clf = RandomForestClassifier(random_state=202, n_estimators=10, max_depth=10)
     clf.fit(X_train, Y_train)
     predicted = clf.predict_proba(X_test)
-    ex = shap.TreeExplainer(clf)
+    ex = shap_domino.TreeExplainer(clf)
     shap_values = ex.shap_values(X_test)
     assert np.abs(shap_values[0].sum(1) + ex.expected_value[0] - predicted[:,0]).max() < 1e-4, \
         "SHAP values don't sum to model output!"
     
 def test_sum_match_extra_trees():
-    import shap
+    import shap_domino
     import numpy as np
     from sklearn.model_selection import train_test_split
     from sklearn.ensemble import ExtraTreesRegressor
     import sklearn
 
-    X_train,X_test,Y_train,_ = train_test_split(*shap.datasets.adult(), test_size=0.2, random_state=0)
+    X_train,X_test,Y_train,_ = train_test_split(*shap_domino.datasets.adult(), test_size=0.2, random_state=0)
     clf = ExtraTreesRegressor(random_state=202, n_estimators=10, max_depth=10)
     clf.fit(X_train, Y_train)
     predicted = clf.predict(X_test)
-    ex = shap.TreeExplainer(clf)
+    ex = shap_domino.TreeExplainer(clf)
     shap_values = ex.shap_values(X_test)
     assert np.abs(shap_values.sum(1) + ex.expected_value - predicted).max() < 1e-4, \
         "SHAP values don't sum to model output!"
 
 def test_single_row_random_forest():
-    import shap
+    import shap_domino
     import numpy as np
     from sklearn.model_selection import train_test_split
     from sklearn.ensemble import RandomForestClassifier
     import sklearn
 
-    X_train,X_test,Y_train,_ = train_test_split(*shap.datasets.adult(), test_size=0.2, random_state=0)
+    X_train,X_test,Y_train,_ = train_test_split(*shap_domino.datasets.adult(), test_size=0.2, random_state=0)
     clf = RandomForestClassifier(random_state=202, n_estimators=10, max_depth=10)
     clf.fit(X_train, Y_train)
     predicted = clf.predict_proba(X_test)
-    ex = shap.TreeExplainer(clf)
+    ex = shap_domino.TreeExplainer(clf)
     shap_values = ex.shap_values(X_test.iloc[0,:])
     assert np.abs(shap_values[0].sum() + ex.expected_value[0] - predicted[0,0]) < 1e-4, \
         "SHAP values don't sum to model output!"
 
 def test_sum_match_gradient_boosting_classifier():
-    import shap
+    import shap_domino
     import numpy as np
     from sklearn.model_selection import train_test_split
     from sklearn.ensemble import GradientBoostingClassifier
     import sklearn
 
-    X_train,X_test,Y_train,_ = train_test_split(*shap.datasets.adult(), test_size=0.2, random_state=0)
+    X_train,X_test,Y_train,_ = train_test_split(*shap_domino.datasets.adult(), test_size=0.2, random_state=0)
     clf = GradientBoostingClassifier(random_state=202, n_estimators=10, max_depth=10)
     clf.fit(X_train, Y_train)
 
@@ -717,7 +717,7 @@ def test_sum_match_gradient_boosting_classifier():
     predicted = clf.decision_function(X_test)
 
     # check SHAP values
-    ex = shap.TreeExplainer(clf)
+    ex = shap_domino.TreeExplainer(clf)
     initial_ex_value = ex.expected_value
     shap_values = ex.shap_values(X_test)
     assert np.abs(shap_values.sum(1) + ex.expected_value - predicted).max() < 1e-4, \
@@ -732,17 +732,17 @@ def test_sum_match_gradient_boosting_classifier():
         "SHAP interaction values don't sum to model output!"
 
 def test_single_row_gradient_boosting_classifier():
-    import shap
+    import shap_domino
     import numpy as np
     from sklearn.model_selection import train_test_split
     from sklearn.ensemble import GradientBoostingClassifier
     import sklearn
 
-    X_train,X_test,Y_train,_ = train_test_split(*shap.datasets.adult(), test_size=0.2, random_state=0)
+    X_train,X_test,Y_train,_ = train_test_split(*shap_domino.datasets.adult(), test_size=0.2, random_state=0)
     clf = GradientBoostingClassifier(random_state=202, n_estimators=10, max_depth=10)
     clf.fit(X_train, Y_train)
     predicted = clf.decision_function(X_test)
-    ex = shap.TreeExplainer(clf)
+    ex = shap_domino.TreeExplainer(clf)
     shap_values = ex.shap_values(X_test.iloc[0,:])
     assert np.abs(shap_values.sum() + ex.expected_value - predicted[0]) < 1e-4, \
         "SHAP values don't sum to model output!"
@@ -751,12 +751,12 @@ def test_HistGradientBoostingRegressor():
     from sklearn.experimental import enable_hist_gradient_boosting
     from sklearn.ensemble import HistGradientBoostingRegressor
     import numpy as np
-    import shap
+    import shap_domino
 
     # train a tree-based model
-    X, y = shap.datasets.diabetes()
+    X, y = shap_domino.datasets.diabetes()
     model = HistGradientBoostingRegressor(max_iter=1000, max_depth=6).fit(X, y)
-    explainer = shap.TreeExplainer(model)
+    explainer = shap_domino.TreeExplainer(model)
     shap_values = explainer.shap_values(X)
     assert np.max(np.abs(shap_values.sum(1) + explainer.expected_value - model.predict(X))) < 1e-4
 
@@ -764,12 +764,12 @@ def test_HistGradientBoostingClassifier_proba():
     from sklearn.experimental import enable_hist_gradient_boosting
     from sklearn.ensemble import HistGradientBoostingClassifier
     import numpy as np
-    import shap
+    import shap_domino
 
     # train a tree-based model
-    X, y = shap.datasets.adult()
+    X, y = shap_domino.datasets.adult()
     model = HistGradientBoostingClassifier(max_iter=10, max_depth=6).fit(X, y)
-    explainer = shap.TreeExplainer(model, shap.sample(X, 10), model_output="predict_proba")
+    explainer = shap_domino.TreeExplainer(model, shap_domino.sample(X, 10), model_output="predict_proba")
     shap_values = explainer.shap_values(X)
     assert np.max(np.abs(shap_values[0].sum(1) + explainer.expected_value[0] - model.predict_proba(X)[:,0])) < 1e-4
 
@@ -777,65 +777,65 @@ def test_HistGradientBoostingClassifier_multidim():
     from sklearn.experimental import enable_hist_gradient_boosting
     from sklearn.ensemble import HistGradientBoostingClassifier
     import numpy as np
-    import shap
+    import shap_domino
 
     # train a tree-based model
-    X, y = shap.datasets.adult()
+    X, y = shap_domino.datasets.adult()
     X = X[:100]
     y = y[:100]
     y = np.random.randint(0, 3, len(y))
     model = HistGradientBoostingClassifier(max_iter=10, max_depth=6).fit(X, y)
-    explainer = shap.TreeExplainer(model, shap.sample(X, 10), model_output="raw")
+    explainer = shap_domino.TreeExplainer(model, shap_domino.sample(X, 10), model_output="raw")
     shap_values = explainer.shap_values(X)
     assert np.max(np.abs(shap_values[0].sum(1) + explainer.expected_value[0] - model.decision_function(X)[:,0])) < 1e-4
 
 def test_sum_match_gradient_boosting_regressor():
-    import shap
+    import shap_domino
     import numpy as np
     from sklearn.model_selection import train_test_split
     from sklearn.ensemble import GradientBoostingRegressor
     import sklearn
 
-    X_train,X_test,Y_train,_ = train_test_split(*shap.datasets.adult(), test_size=0.2, random_state=0)
+    X_train,X_test,Y_train,_ = train_test_split(*shap_domino.datasets.adult(), test_size=0.2, random_state=0)
     clf = GradientBoostingRegressor(random_state=202, n_estimators=10, max_depth=10)
     clf.fit(X_train, Y_train)
 
     predicted = clf.predict(X_test)
-    ex = shap.TreeExplainer(clf)
+    ex = shap_domino.TreeExplainer(clf)
     shap_values = ex.shap_values(X_test)
     assert np.abs(shap_values.sum(1) + ex.expected_value - predicted).max() < 1e-4, \
         "SHAP values don't sum to model output!"
 
 def test_single_row_gradient_boosting_regressor():
-    import shap
+    import shap_domino
     import numpy as np
     from sklearn.model_selection import train_test_split
     from sklearn.ensemble import GradientBoostingRegressor
     import sklearn
 
-    X_train,X_test,Y_train,_ = train_test_split(*shap.datasets.adult(), test_size=0.2, random_state=0)
+    X_train,X_test,Y_train,_ = train_test_split(*shap_domino.datasets.adult(), test_size=0.2, random_state=0)
     clf = GradientBoostingRegressor(random_state=202, n_estimators=10, max_depth=10)
     clf.fit(X_train, Y_train)
     
     predicted = clf.predict(X_test)
-    ex = shap.TreeExplainer(clf)
+    ex = shap_domino.TreeExplainer(clf)
     shap_values = ex.shap_values(X_test.iloc[0,:])
     assert np.abs(shap_values.sum() + ex.expected_value - predicted[0]) < 1e-4, \
         "SHAP values don't sum to model output!"
 
 
 def test_multi_target_random_forest():
-    import shap
+    import shap_domino
     import numpy as np
     from sklearn.model_selection import train_test_split
     from sklearn.ensemble import RandomForestRegressor
 
-    X_train, X_test, Y_train, _ = train_test_split(*shap.datasets.linnerud(), test_size=0.2, random_state=0)
+    X_train, X_test, Y_train, _ = train_test_split(*shap_domino.datasets.linnerud(), test_size=0.2, random_state=0)
     est = RandomForestRegressor(random_state=202, n_estimators=10, max_depth=10)
     est.fit(X_train, Y_train)
     predicted = est.predict(X_test)
 
-    explainer = shap.TreeExplainer(est)
+    explainer = shap_domino.TreeExplainer(est)
     expected_values = np.asarray(explainer.expected_value)
     assert len(expected_values) == est.n_outputs_, "Length of expected_values doesn't match n_outputs_"
     shap_values = np.asarray(explainer.shap_values(X_test)).reshape(est.n_outputs_ * X_test.shape[0], X_test.shape[1])
@@ -843,16 +843,16 @@ def test_multi_target_random_forest():
     assert np.allclose(phi.sum(1), predicted.flatten(order="F"), atol=1e-4)
 
 def test_isolation_forest():
-    import shap
+    import shap_domino
     import numpy as np
     from sklearn.ensemble import IsolationForest
     from sklearn.ensemble._iforest import _average_path_length
 
-    X,_ = shap.datasets.boston()
+    X,_ = shap_domino.datasets.boston()
     iso = IsolationForest(contamination='auto')
     iso.fit(X)
 
-    explainer = shap.TreeExplainer(iso)
+    explainer = shap_domino.TreeExplainer(iso)
     shap_values = explainer.shap_values(X)
 
     score_from_shap = - 2**(
@@ -863,17 +863,17 @@ def test_isolation_forest():
 
 # TODO: this has sometimes failed with strange answers, should run memcheck on this for any memory issues at some point...
 def test_multi_target_extra_trees():
-    import shap
+    import shap_domino
     import numpy as np
     from sklearn.model_selection import train_test_split
     from sklearn.ensemble import ExtraTreesRegressor
 
-    X_train, X_test, Y_train, _ = train_test_split(*shap.datasets.linnerud(), test_size=0.2, random_state=0)
+    X_train, X_test, Y_train, _ = train_test_split(*shap_domino.datasets.linnerud(), test_size=0.2, random_state=0)
     est = ExtraTreesRegressor(random_state=202, n_estimators=10, max_depth=10)
     est.fit(X_train, Y_train)
     predicted = est.predict(X_test)
 
-    explainer = shap.TreeExplainer(est)
+    explainer = shap_domino.TreeExplainer(est)
     expected_values = np.asarray(explainer.expected_value)
     assert len(expected_values) == est.n_outputs_, "Length of expected_values doesn't match n_outputs_"
     shap_values = np.asarray(explainer.shap_values(X_test)).reshape(est.n_outputs_ * X_test.shape[0], X_test.shape[1])
@@ -890,10 +890,10 @@ def test_provided_background_tree_path_dependent():
 
     from sklearn.model_selection import train_test_split
     import numpy as np
-    import shap
+    import shap_domino
     np.random.seed(10)
 
-    X,y = shap.datasets.iris()
+    X,y = shap_domino.datasets.iris()
     X = X[:100]
     y = y[:100]
     train_x, test_x, train_y, _ = train_test_split(X, y, random_state=1)
@@ -912,7 +912,7 @@ def test_provided_background_tree_path_dependent():
 
     bst = xgboost.train(params=params, dtrain=dtrain, num_boost_round=100)
 
-    explainer = shap.TreeExplainer(bst, test_x, feature_perturbation="tree_path_dependent")
+    explainer = shap_domino.TreeExplainer(bst, test_x, feature_perturbation="tree_path_dependent")
     diffs = explainer.expected_value + explainer.shap_values(test_x).sum(1) - bst.predict(dtest, output_margin=True)
     assert np.max(np.abs(diffs)) < 1e-4, "SHAP values don't sum to model output!"
     assert np.abs(explainer.expected_value - bst.predict(dtest, output_margin=True).mean()) < 1e-6, "Bad expected_value!"
@@ -926,10 +926,10 @@ def test_provided_background_independent():
 
     from sklearn.model_selection import train_test_split
     import numpy as np
-    import shap
+    import shap_domino
     np.random.seed(10)
 
-    X,y = shap.datasets.iris()
+    X,y = shap_domino.datasets.iris()
     X = X[:100]
     y = y[:100]
     train_x, test_x, train_y, _ = train_test_split(X, y, random_state=1)
@@ -948,7 +948,7 @@ def test_provided_background_independent():
 
     bst = xgboost.train(params=params, dtrain=dtrain, num_boost_round=100)
 
-    explainer = shap.TreeExplainer(bst, test_x, feature_perturbation="interventional")
+    explainer = shap_domino.TreeExplainer(bst, test_x, feature_perturbation="interventional")
     diffs = explainer.expected_value + explainer.shap_values(test_x).sum(1) - bst.predict(dtest, output_margin=True)
     assert np.max(np.abs(diffs)) < 1e-4, "SHAP values don't sum to model output!"
     assert np.abs(explainer.expected_value - bst.predict(dtest, output_margin=True).mean()) < 1e-4, "Bad expected_value!"
@@ -962,10 +962,10 @@ def test_provided_background_independent_prob_output():
 
     from sklearn.model_selection import train_test_split
     import numpy as np
-    import shap
+    import shap_domino
     np.random.seed(10)
 
-    X,y = shap.datasets.iris()
+    X,y = shap_domino.datasets.iris()
     X = X[:100]
     y = y[:100]
     train_x, test_x, train_y, _ = train_test_split(X, y, random_state=1)
@@ -985,7 +985,7 @@ def test_provided_background_independent_prob_output():
 
         bst = xgboost.train(params=params, dtrain=dtrain, num_boost_round=100)
 
-        explainer = shap.TreeExplainer(bst, test_x, feature_perturbation="interventional", model_output="probability")
+        explainer = shap_domino.TreeExplainer(bst, test_x, feature_perturbation="interventional", model_output="probability")
         diffs = explainer.expected_value + explainer.shap_values(test_x).sum(1) - bst.predict(dtest)
         assert np.max(np.abs(diffs)) < 1e-4, "SHAP values don't sum to model output!"
         assert np.abs(explainer.expected_value - bst.predict(dtest).mean()) < 1e-4, "Bad expected_value!"
@@ -1001,7 +1001,7 @@ def test_single_tree_compare_with_kernel_shap():
         print("Skipping test_single_tree_compare_with_kernel_shap!")
         return
     import numpy as np
-    import shap
+    import shap_domino
     np.random.seed(10)
 
     n = 100
@@ -1023,9 +1023,9 @@ def test_single_tree_compare_with_kernel_shap():
     for _ in range(5):
         x_ind = np.random.choice(X.shape[1]); x = X[x_ind:x_ind+1,:]
 
-        expl = shap.TreeExplainer(model, X, feature_perturbation="interventional")
+        expl = shap_domino.TreeExplainer(model, X, feature_perturbation="interventional")
         f = lambda inp : model.predict(xgboost.DMatrix(inp))
-        expl_kern = shap.KernelExplainer(f, X)
+        expl_kern = shap_domino.KernelExplainer(f, X)
 
         itshap = expl.shap_values(x)
         kshap = expl_kern.shap_values(x, nsamples=150)
@@ -1043,7 +1043,7 @@ def test_several_trees():
     except:
         print("Skipping test_several_trees!")
         return
-    import shap
+    import shap_domino
     import numpy as np
     np.random.seed(10)
 
@@ -1065,7 +1065,7 @@ def test_several_trees():
     # Compare for five random samples
     for _ in range(5):
         x_ind = np.random.choice(X.shape[1]); x = X[x_ind:x_ind+1,:]
-        expl = shap.TreeExplainer(model, X, feature_perturbation="interventional")
+        expl = shap_domino.TreeExplainer(model, X, feature_perturbation="interventional")
         itshap = expl.shap_values(x)
         assert np.allclose(itshap.sum() + expl.expected_value, ypred[x_ind]), \
         "SHAP values don't sum to model output!"
@@ -1089,7 +1089,7 @@ def test_single_tree_nonlinear_transformations():
     except:
         print("Skipping test_several_trees!")
         return
-    import shap
+    import shap_domino
     import numpy as np
     np.random.seed(10)
 
@@ -1112,9 +1112,9 @@ def test_single_tree_nonlinear_transformations():
     pred = model.predict(Xd,output_margin=True) # In margin space (log odds)
     trans_pred = model.predict(Xd) # In probability space
 
-    expl = shap.TreeExplainer(model, X, feature_perturbation="interventional")
+    expl = shap_domino.TreeExplainer(model, X, feature_perturbation="interventional")
     f = lambda inp : model.predict(xgboost.DMatrix(inp), output_margin=True)
-    expl_kern = shap.KernelExplainer(f, X)
+    expl_kern = shap_domino.KernelExplainer(f, X)
 
     x_ind = 0; x = X[x_ind:x_ind+1,:]
     itshap = expl.shap_values(x)
@@ -1125,12 +1125,12 @@ def test_single_tree_nonlinear_transformations():
     "Independent Tree SHAP doesn't match Kernel SHAP on explaining margin!"
 
     model.set_attr(objective="binary:logistic")
-    expl = shap.TreeExplainer(model, X, feature_perturbation="interventional", model_output="probability")
+    expl = shap_domino.TreeExplainer(model, X, feature_perturbation="interventional", model_output="probability")
     itshap = expl.shap_values(x)
     assert np.allclose(itshap.sum() + expl.expected_value, trans_pred[x_ind]), \
     "SHAP values don't sum to model output on explaining logistic!"
 
-    # expl = shap.TreeExplainer(model, X, feature_perturbation="interventional", model_output="logloss")
+    # expl = shap_domino.TreeExplainer(model, X, feature_perturbation="interventional", model_output="logloss")
     # itshap = expl.shap_values(x,y=y[x_ind])
     # margin_pred = model.predict(xgb.DMatrix(x),output_margin=True)
     # currpred = log_loss(y[x_ind],sigmoid(margin_pred))
@@ -1144,7 +1144,7 @@ def test_xgboost_classifier_independent_margin():
         print("Skipping test_several_trees!")
         return
     import numpy as np
-    import shap
+    import shap_domino
 
     # train XGBoost model
     np.random.seed(10)
@@ -1159,7 +1159,7 @@ def test_xgboost_classifier_independent_margin():
     model.fit(X, y)
 
     # explain the model's predictions using SHAP values
-    e = shap.TreeExplainer(model, X, feature_perturbation="interventional", model_output="margin")
+    e = shap_domino.TreeExplainer(model, X, feature_perturbation="interventional", model_output="margin")
     shap_values = e.shap_values(X)
 
     assert np.allclose(shap_values.sum(1) + e.expected_value, model.predict(X, output_margin=True))
@@ -1171,7 +1171,7 @@ def test_xgboost_classifier_independent_probability():
     except:
         print("Skipping test_several_trees!")
         return
-    import shap
+    import shap_domino
     import numpy as np
 
     # train XGBoost model
@@ -1187,7 +1187,7 @@ def test_xgboost_classifier_independent_probability():
     model.fit(X, y)
 
     # explain the model's predictions using SHAP values
-    e = shap.TreeExplainer(model, X, feature_perturbation="interventional", model_output="probability")
+    e = shap_domino.TreeExplainer(model, X, feature_perturbation="interventional", model_output="probability")
     shap_values = e.shap_values(X)
 
     assert np.allclose(shap_values.sum(1) + e.expected_value, model.predict_proba(X)[:,1])
@@ -1198,16 +1198,16 @@ def test_xgboost_classifier_independent_probability():
 #     except:
 #         print("Skipping test_front_page_xgboost!")
 #         return
-#     import shap
+#     import shap_domino
 #     import numpy as np
 
 #     # train XGBoost model
-#     X, y = shap.datasets.boston()
+#     X, y = shap_domino.datasets.boston()
 #     model = xgboost.XGBRegressor()
 #     model.fit(X, y)
 
 #     # explain the model's predictions using SHAP values
-#     explainer = shap.TreeExplainer(model, X, feature_perturbation="global_path_dependent")
+#     explainer = shap_domino.TreeExplainer(model, X, feature_perturbation="global_path_dependent")
 #     shap_values = explainer.shap_values(X)
 
 #     assert np.allclose(shap_values.sum(1) + explainer.expected_value, model.predict(X))
@@ -1219,7 +1219,7 @@ def test_skopt_rf_et():
     except:
         print("Skipping test_skopt_rf_et!")
         return
-    import shap
+    import shap_domino
     import numpy as np
 
     # Define an objective function for skopt to optimise.
@@ -1236,13 +1236,13 @@ def test_skopt_rf_et():
     et_df = pd.DataFrame(result_et.x_iters, columns = ["X0", "X1"])
 
     # Explain the model's predictions.
-    explainer_et = shap.TreeExplainer(result_et.models[-1], et_df)
+    explainer_et = shap_domino.TreeExplainer(result_et.models[-1], et_df)
     shap_values_et = explainer_et.shap_values(et_df)
 
     rf_df = pd.DataFrame(result_rf.x_iters, columns = ["X0", "X1"])
 
     # Explain the model's predictions (Random forest).
-    explainer_rf = shap.TreeExplainer(result_rf.models[-1], rf_df)
+    explainer_rf = shap_domino.TreeExplainer(result_rf.models[-1], rf_df)
     shap_values_rf = explainer_rf.shap_values(rf_df)
 
     assert np.allclose(shap_values_et.sum(1) + explainer_et.expected_value, result_et.models[-1].predict(et_df))

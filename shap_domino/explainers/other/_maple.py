@@ -1,6 +1,6 @@
 
-import shap
-from shap.explainers._explainer import Explainer
+import shap_domino
+from shap_domino.explainers._explainer import Explainer
 import numpy as np
 from sklearn.model_selection import train_test_split
 

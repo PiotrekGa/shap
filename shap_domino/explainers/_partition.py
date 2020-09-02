@@ -49,7 +49,7 @@ class Partition(Explainer):
             masked samples will then be evaluated using the model function and the outputs averaged.
             As a shortcut for the standard masking using by SHAP you can pass a background data matrix
             instead of a function and that matrix will be used for masking. Domain specific masking
-            functions are available in shap such as shap.maksers.Image for images and shap.maskers.Text
+            functions are available in shap_domino such as shap_domino.maksers.Image for images and shap_domino.maskers.Text
             for text.
 
         partition_tree : None or function or numpy.array
@@ -83,7 +83,7 @@ class Partition(Explainer):
         self.expected_value = None
         self._curr_base_value = None
         if getattr(self.masker, "clustering", None) is None:
-            raise ValueError("The passed masker must have a .clustering attribute defined! Try shap.maskers.Partition(data) for example.")
+            raise ValueError("The passed masker must have a .clustering attribute defined! Try shap_domino.maskers.Partition(data) for example.")
         # if partition_tree is None:
         #     if not hasattr(masker, "partition_tree"):
         #         raise ValueError("The passed masker does not have masker.clustering, so the partition_tree must be passed!")

@@ -28,15 +28,15 @@ class Explainer():
             model(*masker(*args, mask=mask)).mean()
             As a shortcut for the standard masking using by SHAP you can pass a background data matrix
             instead of a function and that matrix will be used for masking. Domain specific masking
-            functions are available in shap such as shap.ImageMasker for images and shap.TokenMasker
+            functions are available in shap_domino such as shap_domino.ImageMasker for images and shap_domino.TokenMasker
             for text. In addition to determining how to replace hidden features, the masker can also
             constrain the rules of the cooperative game used to explain the model. For example
-            shap.TabularMasker(data, hclustering="correlation") will enforce a hierarchial clustering
+            shap_domino.TabularMasker(data, hclustering="correlation") will enforce a hierarchial clustering
             of coalitions for the game (in this special case the attributions are known as the Owen values).
 
         link : function 
             The link function used to map between the output units of the model and the SHAP value units. By
-            default it is shap.links.identity, but shap.links.logit can be useful so that expectations are
+            default it is shap_domino.links.identity, but shap_domino.links.logit can be useful so that expectations are
             computed in probability units while explanations remain in the (more naturally additive) log-odds
             units. For more details on how link functions work see any overview of link functions for generalized
             linear models.
@@ -61,7 +61,7 @@ class Explainer():
         self.model = model
         self.output_names = output_names
         
-        # wrap the incoming masker object as a shap.Masker object
+        # wrap the incoming masker object as a shap_domino.Masker object
         if safe_isinstance(masker, "pandas.core.frame.DataFrame") or (safe_isinstance(masker, "numpy.ndarray") and len(masker.shape) == 2):
             if algorithm == "partition":
                 self.masker = maskers.Partition(masker)

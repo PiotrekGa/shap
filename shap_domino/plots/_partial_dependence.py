@@ -1,4 +1,4 @@
-import shap
+import shap_domino
 from ..utils import convert_name, sample, safe_isinstance
 import warnings
 try:
@@ -36,7 +36,7 @@ def partial_dependence(ind, model, data, xmin="percentile(0)", xmax="percentile(
     """ A basic partial dependence plot function.
     """
     
-    if safe_isinstance(data, "shap.Explanation"):
+    if safe_isinstance(data, "shap_domino.Explanation"):
         features = data.data
         shap_values = data
     else:
@@ -110,10 +110,10 @@ def partial_dependence(ind, model, data, xmin="percentile(0)", xmax="percentile(
         if ice:
             if ace_linewidth == "auto":
                 ace_linewidth = min(1, 50/ice_vals.shape[1]) # pylint: disable=unsubscriptable-object
-            ax1.plot(xs, ice_vals, color=shap.plots.colors.light_blue_rgb, linewidth=ace_linewidth, alpha=ace_opacity)
+            ax1.plot(xs, ice_vals, color=shap_domino.plots.colors.light_blue_rgb, linewidth=ace_linewidth, alpha=ace_opacity)
 
         # the line plot
-        ax1.plot(xs, vals, color=shap.plots.colors.blue_rgb, linewidth=pd_linewidth, alpha=pd_opacity)
+        ax1.plot(xs, vals, color=shap_domino.plots.colors.blue_rgb, linewidth=pd_linewidth, alpha=pd_opacity)
 
         ax2.set_ylim(0,features.shape[0])#ax2.get_ylim()[0], ax2.get_ylim()[1] * 4)
         ax1.set_xlabel(feature_names[ind], fontsize=13)
@@ -186,7 +186,7 @@ def partial_dependence(ind, model, data, xmin="percentile(0)", xmax="percentile(
                 bottom=shap_values.base_values, 
                 markerfmt="o", basefmt=" ", use_line_collection=True
             )
-            stemlines.set_edgecolors([shap.plots.colors.red_rgb if v > 0 else shap.plots.colors.blue_rgb for v in vals])
+            stemlines.set_edgecolors([shap_domino.plots.colors.red_rgb if v > 0 else shap_domino.plots.colors.blue_rgb for v in vals])
             pl.setp(stemlines, 'zorder', -1)
             pl.setp(stemlines, 'linewidth', 2)
             pl.setp(markerline, 'color', "black")
@@ -237,7 +237,7 @@ def partial_dependence(ind, model, data, xmin="percentile(0)", xmax="percentile(
 #         zs = np.array(fun(np.ravel(X), np.ravel(Y)))
 #         Z = zs.reshape(X.shape)
 
-        ax.plot_surface(x0, x1, vals, cmap=shap.plots.colors.red_blue_transparent)
+        ax.plot_surface(x0, x1, vals, cmap=shap_domino.plots.colors.red_blue_transparent)
 
         ax.set_xlabel(feature_names[ind0], fontsize=13)
         ax.set_ylabel(feature_names[ind1], fontsize=13)

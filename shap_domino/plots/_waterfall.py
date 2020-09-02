@@ -51,9 +51,9 @@ def waterfall(shap_values, max_display=10, show=True):
     if (type(base_values) == np.ndarray and len(base_values) > 0) or type(base_values) == list:
         raise Exception("waterfall_plot requires a scalar base_values of the model output as the first " \
                         "parameter, but you have passed an array as the first parameter! " \
-                        "Try shap.waterfall_plot(explainer.base_values[0], values[0], X[0]) or " \
+                        "Try shap_domino.waterfall_plot(explainer.base_values[0], values[0], X[0]) or " \
                         "for multi-output models try " \
-                        "shap.waterfall_plot(explainer.base_values[0], values[0][0], X[0]).")
+                        "shap_domino.waterfall_plot(explainer.base_values[0], values[0][0], X[0]).")
 
     # make sure we only have a single explanation to plot
     if len(values.shape) == 2:
@@ -342,9 +342,9 @@ def waterfall_legacy(expected_value, shap_values=None, features=None, feature_na
     if (type(expected_value) == np.ndarray and len(expected_value) > 0) or type(expected_value) == list:
         raise Exception("waterfall_plot requires a scalar expected_value of the model output as the first " \
                         "parameter, but you have passed an array as the first parameter! " \
-                        "Try shap.waterfall_plot(explainer.expected_value[0], shap_values[0], X[0]) or " \
+                        "Try shap_domino.waterfall_plot(explainer.expected_value[0], shap_values[0], X[0]) or " \
                         "for multi-output models try " \
-                        "shap.waterfall_plot(explainer.expected_value[0], shap_values[0][0], X[0]).")
+                        "shap_domino.waterfall_plot(explainer.expected_value[0], shap_values[0][0], X[0]).")
 
     # make sure we only have a single explanation to plot
     if len(shap_values.shape) == 2:

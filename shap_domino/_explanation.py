@@ -13,7 +13,7 @@ from .utils._general import OpChain
 # pylint: disable=no-member
 
 
-op_chain_root = OpChain("shap.Explanation")
+op_chain_root = OpChain("shap_domino.Explanation")
 class MetaExplanation(type):
     """ This metaclass exposes the Explanation object's methods for creating template op chains.
     """

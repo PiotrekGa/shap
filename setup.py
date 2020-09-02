@@ -60,7 +60,7 @@ def run_setup(with_binary=True, test_xgboost=True, test_lightgbm=True, test_catb
         if sys.platform == 'zos':
             compile_args.append('-qlonglong')
         ext_modules.append(
-            Extension('shap._cext', sources=['shap/_cext.cc'], extra_compile_args=compile_args)
+            Extension('shap_domino._cext', sources=['shap_domino/_cext.cc'], extra_compile_args=compile_args)
         )
 
     tests_require = ['nose']
@@ -85,23 +85,23 @@ def run_setup(with_binary=True, test_xgboost=True, test_lightgbm=True, test_catb
     extras_require['all'] = list(set(i for val in extras_require.values() for i in val))
 
     setup(
-        name='shap',
-        version=find_version("shap", "__init__.py"),
+        name='shap_domino',
+        version=find_version("shap_domino", "__init__.py"),
         description='A unified approach to explain the output of any machine learning model.',
         long_description="SHAP (SHapley Additive exPlanations) is a unified approach to explain the output of " + \
                          "any machine learning model. SHAP connects game theory with local explanations, uniting " + \
                          "several previous methods and representing the only possible consistent and locally accurate " + \
                          "additive feature attribution method based on expectations.",
         long_description_content_type="text/markdown",
-        url='http://github.com/slundberg/shap',
-        author='Scott Lundberg',
+        url='http://github.com/PiotrekGa/shap',
+        author='Scott Lundberg, fork by PiotrekGa',
         author_email='slund1@cs.washington.edu',
         license='MIT',
         packages=[
-            'shap', 'shap.explainers', 'shap.explainers.other', 'shap.explainers._deep',
-            'shap.plots', 'shap.plots.colors', 'shap.benchmark', 'shap.maskers', 'shap.utils'
+            'shap_domino', 'shap_domino.explainers', 'shap_domino.explainers.other', 'shap_domino.explainers._deep',
+            'shap_domino.plots', 'shap_domino.plots.colors', 'shap_domino.benchmark', 'shap_domino.maskers', 'shap_domino.utils'
         ],
-        package_data={'shap': ['plots/resources/*', 'tree_shap.h']},
+        package_data={'shap_domino': ['plots/resources/*', 'tree_shap.h']},
         cmdclass={'build_ext': build_ext},
         setup_requires=['numpy'],
         install_requires=['numpy', 'scipy', 'scikit-learn', 'pandas', 'tqdm>4.25.0', 'slicer', 'numba'],

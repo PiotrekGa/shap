@@ -13,7 +13,7 @@ def test_tf_keras_mnist_cnn():
     from tensorflow.keras.layers import Dense, Dropout, Flatten, Activation
     from tensorflow.keras.layers import Conv2D, MaxPooling2D
     from tensorflow.keras import backend as K
-    import shap
+    import shap_domino
     import numpy as np
 
     tf.compat.v1.disable_eager_execution()
@@ -72,7 +72,7 @@ def test_tf_keras_mnist_cnn():
     # explain by passing the tensorflow inputs and outputs
     np.random.seed(0)
     inds = np.random.choice(x_train.shape[0], 20, replace=False)
-    e = shap.GradientExplainer((model.layers[0].input, model.layers[-1].input), x_train[inds,:,:])
+    e = shap_domino.GradientExplainer((model.layers[0].input, model.layers[-1].input), x_train[inds, :, :])
     shap_values = e.shap_values(x_test[:1], nsamples=2000)
 
     sess = tf.compat.v1.keras.backend.get_session()
@@ -93,7 +93,7 @@ def test_pytorch_mnist_cnn():
     from torch import nn
     from torch.nn import functional as F
     import shutil
-    import shap
+    import shap_domino
     import numpy as np
 
     batch_size=128
@@ -162,9 +162,9 @@ def test_pytorch_mnist_cnn():
         np.random.seed(0)
         inds = np.random.choice(next_x.shape[0], 20, replace=False)
         if interim:
-            e = shap.GradientExplainer((model, model.conv1), next_x[inds, :, :, :])
+            e = shap_domino.GradientExplainer((model, model.conv1), next_x[inds, :, :, :])
         else:
-            e = shap.GradientExplainer(model, next_x[inds, :, :, :])
+            e = shap_domino.GradientExplainer(model, next_x[inds, :, :, :])
         test_x, _ = next(iter(test_loader))
         shap_values = e.shap_values(test_x[:1], nsamples=5000)
 
@@ -193,7 +193,7 @@ def test_pytorch_multiple_inputs():
     _skip_if_no_pytorch()
     import torch
     from torch import nn
-    import shap
+    import shap_domino
     import numpy as np
 
     batch_size = 10
@@ -212,7 +212,7 @@ def test_pytorch_multiple_inputs():
 
     model = Net()
 
-    e = shap.GradientExplainer(model, background)
+    e = shap_domino.GradientExplainer(model, background)
     shap_x1, shap_x2 = e.shap_values([x1, x2])
 
     model.eval()

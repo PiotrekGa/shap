@@ -355,7 +355,7 @@ def decision(
 
     if isinstance(base_value, list) or isinstance(shap_values, list):
         raise TypeError("Looks like multi output. Try base_value[i] and shap_values[i], "
-                        "or use shap.multioutput_decision_plot().")
+                        "or use shap_domino.multioutput_decision_plot().")
 
     # validate shap_values
     if not isinstance(shap_values, np.ndarray):
@@ -594,7 +594,7 @@ def multioutput_decision(base_values, shap_values, row_index, **kwargs) -> Union
     if shap_values.shape[0] != base_values.shape[0]:
         raise ValueError("The base_values output length is different than shap_values.")
 
-    # shift shap base values to mean of base values
+    # shift shap_domino base values to mean of base values
     base_values_mean = base_values.mean()
     for i in range(shap_values.shape[0]):
         shap_values[i] = __change_shap_base_value(base_values[i], base_values_mean, shap_values[i])

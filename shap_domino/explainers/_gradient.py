@@ -1,7 +1,7 @@
 import numpy as np
 import warnings
-from shap.explainers._explainer import Explainer
-from shap.explainers.tf_utils import _get_session, _get_graph, _get_model_inputs, _get_model_output
+from shap_domino.explainers._explainer import Explainer
+from shap_domino.explainers.tf_utils import _get_session, _get_graph, _get_model_inputs, _get_model_output
 from distutils.version import LooseVersion
 keras = None
 tf = None
@@ -36,7 +36,7 @@ class Gradient(Explainer):
             For PyTorch this can be a nn.Module object (model), or a tuple (model, layer), where both
             are nn.Module objects. The model is an nn.Module object which takes as input a tensor
             (or list of tensors) of shape data, and returns a single dimensional output. If the input
-            is a tuple, the returned shap values will be for the input of the layer argument. layer must
+            is a tuple, the returned shap_domino values will be for the input of the layer argument. layer must
             be a layer in the model, i.e. model.conv2.
 
         data : [numpy.array] or [pandas.DataFrame] or [torch.tensor]
@@ -90,7 +90,7 @@ class Gradient(Explainer):
             maximum absolute value. If "custom" Then "ranked_outputs" contains a list of output nodes.
 
         rseed : None or int
-            Seeding the randomness in shap value computation  (background example choice, 
+            Seeding the randomness in shap_domino value computation  (background example choice,
             interpolation between current and background example, smoothing).
 
         Returns
